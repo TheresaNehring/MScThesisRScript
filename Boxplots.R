@@ -1,4 +1,4 @@
-# BOXPLOTS VISUALIZATION SCRIPT
+# BOXPLOTS VISUALIZATION
 
 library(ggplot2)
 library(patchwork)
@@ -304,12 +304,12 @@ create_boxplot_grid <- function(var, data_subset) {
     labs(y = var_with_units, x = "Sampling timepoint") +
     facet_grid(. ~ Group, labeller = labeller(Group = function(x) paste("Group:", x))) +
     theme(
-      axis.text.x = element_text(size = 12, color = "black"),  # Removed bold
-      axis.text.y = element_text(size = 11, color = "black"),
-      axis.title.y = element_text(size = 13, color = "black", face = "bold"),
-      axis.title.x = element_text(size = 12, color = "black", face = "bold"),
-      plot.margin = margin(20, 15, 30, 15),
-      strip.text.x = element_text(size = 13, face = "bold", color = "black"),
+      axis.text.x = element_text(size = 11, color = "black"),  # Reduced from 12 to 11
+      axis.text.y = element_text(size = 10, color = "black"),  # Reduced from 11 to 10
+      axis.title.y = element_text(size = 12, color = "black", face = "bold"),  # Reduced from 13 to 12
+      axis.title.x = element_text(size = 11, color = "black", face = "bold"),  # Reduced from 12 to 11
+      plot.margin = margin(25, 20, 35, 20),  # Increased bottom margin from 30 to 35
+      strip.text.x = element_text(size = 12, face = "bold", color = "black"),  # Reduced from 13 to 12
       strip.background = element_rect(fill = "white", color = "black", linewidth = 0.5),
       panel.grid = element_blank(),
       legend.position = "none",
@@ -326,7 +326,7 @@ create_boxplot_grid <- function(var, data_subset) {
   y_max <- max(data_subset$Value, na.rm = TRUE)
   y_min <- min(data_subset$Value, na.rm = TRUE)
   y_range <- y_max - y_min
-  bracket_y1 <- y_max + 0.10 * y_range
+  bracket_y1 <- y_max + 0.12 * y_range  # Increased from 0.08 back to 0.12 for more space
   
   annotation_data <- data.frame()
   
@@ -353,9 +353,9 @@ create_boxplot_grid <- function(var, data_subset) {
   if (nrow(annotation_data) > 0) {
     p <- p + 
       geom_segment(data = annotation_data, aes(x = x1, xend = x2, y = y, yend = y), color = "black", linewidth = 0.5, inherit.aes = FALSE) +
-      geom_segment(data = annotation_data, aes(x = x1, xend = x1, y = y - 0.015 * y_range, yend = y), color = "black", linewidth = 0.5, inherit.aes = FALSE) +
-      geom_segment(data = annotation_data, aes(x = x2, xend = x2, y = y - 0.015 * y_range, yend = y), color = "black", linewidth = 0.5, inherit.aes = FALSE) +
-      geom_text(data = annotation_data, aes(x = 1.5, y = y + 0.03 * y_range, label = label), size = 4, hjust = 0.5, color = "black", fontface = "bold", inherit.aes = FALSE)
+      geom_segment(data = annotation_data, aes(x = x1, xend = x1, y = y - 0.012 * y_range, yend = y), color = "black", linewidth = 0.5, inherit.aes = FALSE) +
+      geom_segment(data = annotation_data, aes(x = x2, xend = x2, y = y - 0.012 * y_range, yend = y), color = "black", linewidth = 0.5, inherit.aes = FALSE) +
+      geom_text(data = annotation_data, aes(x = 1.5, y = y + 0.04 * y_range, label = label), size = 3.5, hjust = 0.5, color = "black", fontface = "bold", inherit.aes = FALSE)  # Increased spacing from 0.025 to 0.04
   }
   
   return(p)
@@ -463,7 +463,7 @@ if (nrow(hematology_data) > 0) {
   
   if (!is.null(combined_hematologic)) {
     ggsave(filename = file.path(output_dir, "hematology_grid.pdf"), 
-           plot = combined_hematologic, width = 18, height = 20, device = "pdf")
+           plot = combined_hematologic, width = 20, height = 22, device = "pdf")  # Increased dimensions
   }
 }
 
