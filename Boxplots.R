@@ -1,4 +1,4 @@
-# BOXPLOTS VISUALIZATION
+# BOXPLOTS VISUALIZATION SCRIPT
 
 library(ggplot2)
 library(patchwork)
@@ -120,7 +120,7 @@ create_legend_grob <- function() {
     annotate("text", x = 2, y = 0.7, label = "Compromised", size = 5, hjust = 0.5, fontface = "bold") +
     annotate("text", x = 3, y = 0.7, label = "Critical", size = 5, hjust = 0.5, fontface = "bold") +
     annotate("text", x = 5, y = 0.7, label = "Normal", size = 5, hjust = 0.5, fontface = "bold") +
-    annotate("text", x = 6, y = 0.7, label = "Severe Outlier (>3×IQR)", size = 5, hjust = 0.5, fontface = "bold") +
+    annotate("text", x = 6, y = 0.7, label = "Outlier (>3×IQR)", size = 5, hjust = 0.5, fontface = "bold") +
     annotate("text", x = 2, y = 1.4, label = "Clinical Grade", size = 6, hjust = 0.5, fontface = "bold") +
     annotate("text", x = 5.5, y = 1.4, label = "Outlier Status", size = 6, hjust = 0.5, fontface = "bold") +
     scale_color_manual(values = c(
