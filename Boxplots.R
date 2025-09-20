@@ -1,4 +1,4 @@
-# BOXPLOTS VISUALIZATION
+# BOXPLOTS VISUALIZATION SCRIPT
 
 library(ggplot2)
 library(patchwork)
@@ -387,105 +387,105 @@ for (var in ordered_variables) {
   p <- create_boxplot(var, data_var)
   clean_var_name <- get_clean_filename(var)
   pdf_filename <- file.path(output_dir, paste0("boxplot_", clean_var_name, ".pdf"))
-  # Generate individual boxplots
-  for (var in ordered_variables) {
-    data_var <- data_long %>% filter(Variable == var)
-    if (nrow(data_var) == 0 || all(is.na(data_var$Value))) next
-    
-    p <- create_boxplot(var, data_var)
-    clean_var_name <- get_clean_filename(var)
-    pdf_filename <- file.path(output_dir, paste0("boxplot_", clean_var_name, ".pdf"))
-    ggsave(filename = pdf_filename, plot = p, width = 14, height = 10, device = "pdf")
-  }
+# Generate individual boxplots
+for (var in ordered_variables) {
+  data_var <- data_long %>% filter(Variable == var)
+  if (nrow(data_var) == 0 || all(is.na(data_var$Value))) next
   
-  # Generate morphometrics grid
-  morphometrics_data <- data_long %>% filter(Variable %in% morphometrics_variables)
-  if (nrow(morphometrics_data) > 0) {
-    plot_list_morpho <- list()
-    for (var in morphometrics_variables) {
-      data_var <- morphometrics_data %>% filter(Variable == var)
-      if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
-        plot_list_morpho[[var]] <- create_boxplot_grid(var, data_var)
-      }
-    }
-    
-    combined_morpho <- create_grid_with_legend(
-      plot_list_morpho, 
-      "Morphometrics - Boxplots", 
-      color_palette$morphometrics
-    )
-    
-    if (!is.null(combined_morpho)) {
-      ggsave(filename = file.path(output_dir, "morphometrics_grid.pdf"), 
-             plot = combined_morpho, width = 18, height = 15, device = "pdf")
-    }
-  }
-  
-  # Generate blood chemistry grid
-  blood_chemistry_data <- data_long %>% filter(Variable %in% blood_chemistry_variables)
-  if (nrow(blood_chemistry_data) > 0) {
-    plot_list_blood <- list()
-    for (var in blood_chemistry_variables) {
-      data_var <- blood_chemistry_data %>% filter(Variable == var)
-      if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
-        plot_list_blood[[var]] <- create_boxplot_grid(var, data_var)
-      }
-    }
-    
-    combined_blood <- create_grid_with_legend(
-      plot_list_blood, 
-      "Blood Chemistry - Boxplots", 
-      color_palette$blood_chemistry
-    )
-    
-    if (!is.null(combined_blood)) {
-      ggsave(filename = file.path(output_dir, "blood_chemistry_grid.pdf"), 
-             plot = combined_blood, width = 18, height = 15, device = "pdf")
-    }
-  }
-  
-  # Generate hematology grid
-  hematology_data <- data_long %>% filter(Variable %in% hematology_variables)
-  if (nrow(hematology_data) > 0) {
-    plot_list_hematologic <- list()
-    for (var in hematology_variables) {
-      data_var <- hematology_data %>% filter(Variable == var)
-      if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
-        plot_list_hematologic[[var]] <- create_boxplot_grid(var, data_var)
-      }
-    }
-    
-    combined_hematologic <- create_grid_with_legend(
-      plot_list_hematologic, 
-      "Hematology - Boxplots", 
-      color_palette$hematology
-    )
-    
-    if (!is.null(combined_hematologic)) {
-      ggsave(filename = file.path(output_dir, "hematology_grid.pdf"), 
-             plot = combined_hematologic, width = 18, height = 20, device = "pdf")
-    }
-  }
-  
-  # Generate comprehensive grid
-  all_plot_list <- list()
-  for (var in ordered_variables) {
-    data_var <- data_long %>% filter(Variable == var)
+  p <- create_boxplot(var, data_var)
+  clean_var_name <- get_clean_filename(var)
+  pdf_filename <- file.path(output_dir, paste0("boxplot_", clean_var_name, ".pdf"))
+  ggsave(filename = pdf_filename, plot = p, width = 14, height = 10, device = "pdf")
+}
+
+# Generate morphometrics grid
+morphometrics_data <- data_long %>% filter(Variable %in% morphometrics_variables)
+if (nrow(morphometrics_data) > 0) {
+  plot_list_morpho <- list()
+  for (var in morphometrics_variables) {
+    data_var <- morphometrics_data %>% filter(Variable == var)
     if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
-      all_plot_list[[var]] <- create_boxplot_grid(var, data_var)
+      plot_list_morpho[[var]] <- create_boxplot_grid(var, data_var)
     }
   }
   
-  if (length(all_plot_list) > 0) {
-    comprehensive_grid <- create_grid_with_legend(
-      all_plot_list, 
-      "All Variables - Comprehensive Boxplot Analysis", 
-      "black"
-    )
-    
-    if (!is.null(comprehensive_grid)) {
-      ggsave(filename = file.path(output_dir, "comprehensive_measurements_grid.pdf"), 
-             plot = comprehensive_grid, width = 18, height = 40, device = "pdf")
+  combined_morpho <- create_grid_with_legend(
+    plot_list_morpho, 
+    "Morphometrics - Boxplots", 
+    "black"
+  )
+  
+  if (!is.null(combined_morpho)) {
+    ggsave(filename = file.path(output_dir, "morphometrics_grid.pdf"), 
+           plot = combined_morpho, width = 18, height = 15, device = "pdf")
+  }
+}
+
+# Generate blood chemistry grid
+blood_chemistry_data <- data_long %>% filter(Variable %in% blood_chemistry_variables)
+if (nrow(blood_chemistry_data) > 0) {
+  plot_list_blood <- list()
+  for (var in blood_chemistry_variables) {
+    data_var <- blood_chemistry_data %>% filter(Variable == var)
+    if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
+      plot_list_blood[[var]] <- create_boxplot_grid(var, data_var)
     }
   }
+  
+  combined_blood <- create_grid_with_legend(
+    plot_list_blood, 
+    "Blood Chemistry - Boxplots", 
+    "black"
+  )
+  
+  if (!is.null(combined_blood)) {
+    ggsave(filename = file.path(output_dir, "blood_chemistry_grid.pdf"), 
+           plot = combined_blood, width = 18, height = 15, device = "pdf")
+  }
+}
+
+# Generate hematology grid
+hematology_data <- data_long %>% filter(Variable %in% hematology_variables)
+if (nrow(hematology_data) > 0) {
+  plot_list_hematologic <- list()
+  for (var in hematology_variables) {
+    data_var <- hematology_data %>% filter(Variable == var)
+    if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
+      plot_list_hematologic[[var]] <- create_boxplot_grid(var, data_var)
+    }
+  }
+  
+  combined_hematologic <- create_grid_with_legend(
+    plot_list_hematologic, 
+    "Hematology - Boxplots", 
+    "black"
+  )
+  
+  if (!is.null(combined_hematologic)) {
+    ggsave(filename = file.path(output_dir, "hematology_grid.pdf"), 
+           plot = combined_hematologic, width = 18, height = 20, device = "pdf")
+  }
+}
+
+# Generate comprehensive grid
+all_plot_list <- list()
+for (var in ordered_variables) {
+  data_var <- data_long %>% filter(Variable == var)
+  if (nrow(data_var) > 0 && !all(is.na(data_var$Value))) {
+    all_plot_list[[var]] <- create_boxplot_grid(var, data_var)
+  }
+}
+
+if (length(all_plot_list) > 0) {
+  comprehensive_grid <- create_grid_with_legend(
+    all_plot_list, 
+    "All Variables - Comprehensive Boxplot Analysis", 
+    "black"
+  )
+  
+  if (!is.null(comprehensive_grid)) {
+    ggsave(filename = file.path(output_dir, "comprehensive_measurements_grid.pdf"), 
+           plot = comprehensive_grid, width = 18, height = 40, device = "pdf")
+  }
+}
 }
